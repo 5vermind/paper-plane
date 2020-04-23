@@ -12,3 +12,4 @@
 /captures
 .externalNativeBuild
 google-services.json
+android/app/src/main/AndroidManifest.xml
