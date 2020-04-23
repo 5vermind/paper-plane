@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">PaperPlane</string>
+    <string name="admob_key">test key</string>
 </resources>
