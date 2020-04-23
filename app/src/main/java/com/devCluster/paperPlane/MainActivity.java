@@ -62,11 +62,9 @@ public class MainActivity extends AppCompatActivity {
         btnTextSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 if (edtTitleSend.getText().toString().equals("") || edtMainTextSend.getText().toString().equals("") || edtSubTitleSend.getText().toString().equals("")) {
                     Toast.makeText(getApplicationContext(), "필수 입력사항입니다.", Toast.LENGTH_SHORT).show();
                 } else {
-
                     Map<String, Object> text = new HashMap<>();
                     text.put("title", edtTitleSend.getText().toString());
                     text.put("subTitle", edtSubTitleSend.getText().toString());
@@ -86,14 +84,8 @@ public class MainActivity extends AppCompatActivity {
                                     Log.i("Log_Activity", "Error adding Text", e);
                                 }
                             });
-
                 }
-
-
             }
         });
-
-
     }
-
 }
