@@ -15,3 +15,5 @@ google-services.json
 android/app/src/main/AndroidManifest.xml
 app/src/main/AndroidManifest.xml
 app/src/main/res/values/strings.xml
+app/release/paperPlane_200427.apk
+app/release/output.json
