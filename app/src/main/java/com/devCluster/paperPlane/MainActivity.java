@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -18,6 +19,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentReference;
@@ -33,10 +36,14 @@ import java.util.Map;
 public class MainActivity extends AppCompatActivity {
 
     FirebaseFirestore db = FirebaseFirestore.getInstance();
+    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+    TextView tvMain;
 
     EditText edtTitleSend;
     EditText edtSubTitleSend;
     EditText edtMainTextSend;
+
     Button btnTextSend;
 
     AdView mAdView;
@@ -46,6 +53,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        tvMain = findViewById(R.id.tvMain);
+
         edtTitleSend = findViewById(R.id.edtTitleSend);
         edtSubTitleSend = findViewById(R.id.edtSubTitleSend);
         edtMainTextSend = findViewById(R.id.edtMainTextSend);
@@ -53,6 +62,8 @@ public class MainActivity extends AppCompatActivity {
         btnTextSend = findViewById(R.id.btnTextSend);
 
         MobileAds.initialize(this, getString(R.string.admob_test_id));
+
+        tvMain.setText(user.getDisplayName().toString()+"님, 텍스트를 입력해주세요.");
 
         mAdView = findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
