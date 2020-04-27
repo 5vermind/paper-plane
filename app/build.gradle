@@ -20,7 +20,7 @@ android {
 }
 
 dependencies {
-    implementation 'com.google.firebase:firebase-ads:18.0.0'
+    implementation 'com.google.firebase:firebase-ads:+'
     implementation 'com.google.firebase:firebase-firestore:21.2.1'
     implementation 'com.google.firebase:firebase-analytics:+'
     implementation fileTree(dir: 'libs', include: ['*.jar'])

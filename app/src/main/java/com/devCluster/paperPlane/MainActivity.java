@@ -10,7 +10,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+
 import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -21,6 +24,8 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -34,19 +39,24 @@ public class MainActivity extends AppCompatActivity {
     EditText edtMainTextSend;
     Button btnTextSend;
 
+    AdView mAdView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        String admobKey = getString(R.string.admob_key);
-        MobileAds.initialize(this, admobKey);
 
         edtTitleSend = findViewById(R.id.edtTitleSend);
         edtSubTitleSend = findViewById(R.id.edtSubTitleSend);
         edtMainTextSend = findViewById(R.id.edtMainTextSend);
 
         btnTextSend = findViewById(R.id.btnTextSend);
+
+        MobileAds.initialize(this, getString(R.string.admob_test_id));
+
+        mAdView = findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
 
 //        get
 //        db.collection("users").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -91,5 +101,12 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+        MobileAds.initialize(this, new OnInitializationCompleteListener() {
+            @Override
+            public void onInitializationComplete(InitializationStatus initializationStatus) {
+                Log.i("Log_Activity","Ad Init Done.");
+            }
+        });
+
     }
 }
