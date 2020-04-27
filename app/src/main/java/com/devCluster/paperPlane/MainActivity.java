@@ -25,6 +25,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.android.gms.ads.AdRequest;
@@ -63,11 +64,28 @@ public class MainActivity extends AppCompatActivity {
 
         MobileAds.initialize(this, getString(R.string.admob_test_id));
 
-        tvMain.setText(user.getDisplayName().toString()+"님, 텍스트를 입력해주세요.");
+        tvMain.setText(user.getDisplayName().toString() + "님, 텍스트를 입력해주세요.");
 
         mAdView = findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
+
+
+        db.collection("user").orderBy("id", Query.Direction.DESCENDING).limit(1).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+
+                if (task.isSuccessful()) {
+
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        Log.i("Log_Activity", document.getId() + " => " + document.getData());
+                    }
+
+                } else {
+                    Log.i("Log_Activity", "Error getting documents.", task.getException());
+                }
+            }
+        });
 
 //        get
 //        db.collection("users").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -115,7 +133,7 @@ public class MainActivity extends AppCompatActivity {
         MobileAds.initialize(this, new OnInitializationCompleteListener() {
             @Override
             public void onInitializationComplete(InitializationStatus initializationStatus) {
-                Log.i("Log_Activity","Ad Init Done.");
+                Log.i("Log_Activity", "Ad Init Done.");
             }
         });
 
