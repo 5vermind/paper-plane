@@ -36,18 +36,19 @@ import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
-    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    private FirebaseAuth mAuth;
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-    TextView tvMain;
+    private TextView tvMain;
 
-    EditText edtTitleSend;
-    EditText edtSubTitleSend;
-    EditText edtMainTextSend;
+    private EditText edtTitleSend;
+    private EditText edtSubTitleSend;
+    private EditText edtMainTextSend;
 
-    Button btnTextSend;
+    private Button btnTextSend;
 
-    AdView mAdView;
+    private AdView mAdView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
