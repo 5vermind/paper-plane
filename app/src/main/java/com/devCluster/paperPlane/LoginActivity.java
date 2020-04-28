@@ -20,6 +20,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -34,6 +35,11 @@ public class LoginActivity extends AppCompatActivity {
     FirebaseAnalytics mFirebaseAnalytics;
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     Button btnLogin;
+
+    private int idLength = 0;
+
+    Map<String, Object> userInfo = new HashMap<>();
+    Map<String, Object> userId = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,43 +78,69 @@ public class LoginActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == 1) {
-            IdpResponse response = IdpResponse.fromResultIntent(data);
+            final IdpResponse response = IdpResponse.fromResultIntent(data);
 
             if (resultCode == RESULT_OK) {
-                Map<String, Object> userInfo = new HashMap<>();
 
-                db.collection("user").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                //id 인덱스 get해오기
+                db.collection("user").orderBy("id", Query.Direction.DESCENDING).limit(1).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
+
                         if (task.isSuccessful()) {
+
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.i("Log_Activity", document.getId() + " => " + document.getData());
+                                Log.i("Login_Activity",document.getData().values().toString());
+
+                                int currentIdLength = Integer.parseInt(document.getData().values().toArray()[0].toString());
+
+                                Log.i("Login_Activity", "현재 인덱스 최대값: " + currentIdLength);
+
+                                idLength = currentIdLength+1;
+                                userId.put("id",idLength);
+
+                                db.collection("user").document(response.getEmail())
+                                        .set(userId)
+                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+                                                Log.i("Login_Activity","id set 완료");
+                                            }
+                                        });
+
                             }
+
                         } else {
-                            Log.i("Log_Activity", "Error getting documents.", task.getException());
+                            Log.i("Login_Activity", "Error getting documents.", task.getException());
                         }
                     }
                 });
 
-                db.collection("user")
+
+                userInfo.put("email",response.getEmail());
+
+
+                //user 하위 목록의 field에 id 추가
+
+
+                //user 하위 목록의 하위 컬렉션(info)의 field에 이메일 정보 넣기
+                db.collection("user").document(response.getEmail()).collection("info")
                         .add(userInfo)
                         .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                             @Override
                             public void onSuccess(DocumentReference documentReference) {
-                                Log.i("Log_Activity", "User added with ID: " + documentReference.getId());
+                                Log.i("Login_Activity", "User added with ID: " + documentReference.getId());
                             }
                         })
                         .addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
-                                Log.i("Log_Activity", "Error adding User", e);
+                                Log.i("Login_Activity", "Error adding User", e);
                             }
                         });
-
-                Log.i("Log_Activity", user.getDisplayName() + "로그인");
                 intentToMain();
             } else {
-                Log.i("Log_Activity", "로그인 실패: " + response.getError());
+                Log.i("Login_Activity", "로그인 실패: " + response.getError());
             }
         }
     }

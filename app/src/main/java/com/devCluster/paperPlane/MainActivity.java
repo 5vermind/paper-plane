@@ -69,23 +69,21 @@ public class MainActivity extends AppCompatActivity {
         mAdView = findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
-
-
-        db.collection("user").orderBy("id", Query.Direction.DESCENDING).limit(1).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-
-                if (task.isSuccessful()) {
-
-                    for (QueryDocumentSnapshot document : task.getResult()) {
-                        Log.i("Log_Activity", document.getId() + " => " + document.getData());
-                    }
-
-                } else {
-                    Log.i("Log_Activity", "Error getting documents.", task.getException());
-                }
-            }
-        });
+//        db.collection("user").orderBy("id", Query.Direction.DESCENDING).limit(1).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//            @Override
+//            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//
+//                if (task.isSuccessful()) {
+//
+//                    for (QueryDocumentSnapshot document : task.getResult()) {
+//                        Log.i("Main_Activity", ""+document.getData().values().toArray()[1]);
+//                    }
+//
+//                } else {
+//                    Log.i("Main_Activity", "Error getting documents.", task.getException());
+//                }
+//            }
+//        });
 
 //        get
 //        db.collection("users").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -93,11 +91,11 @@ public class MainActivity extends AppCompatActivity {
 //            public void onComplete(@NonNull Task<QuerySnapshot> task) {
 //                if(task.isSuccessful()){
 //                    for(QueryDocumentSnapshot document: task.getResult()){
-//                        Log.i("Log_Activity", document.getId()+" => "+document.getData());
+//                        Log.i("Main_Activity", document.getId()+" => "+document.getData());
 //                    }
 //                }
 //                else{
-//                    Log.i("Log_Activity","Error getting documents.",task.getException());
+//                    Log.i("Main_Activity","Error getting documents.",task.getException());
 //                }
 //            }
 //        });
@@ -113,18 +111,18 @@ public class MainActivity extends AppCompatActivity {
                     text.put("subTitle", edtSubTitleSend.getText().toString());
                     text.put("mainText", edtMainTextSend.getText().toString());
 
-                    db.collection("text")
+                    db.collection("user").document(user.getEmail()).collection("user's")
                             .add(text)
                             .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                                 @Override
                                 public void onSuccess(DocumentReference documentReference) {
-                                    Log.i("Log_Activity", "text added with ID: " + documentReference.getId());
+                                    Log.i("Main_Activity", "text added with ID: " + documentReference.getId());
                                 }
                             })
                             .addOnFailureListener(new OnFailureListener() {
                                 @Override
                                 public void onFailure(@NonNull Exception e) {
-                                    Log.i("Log_Activity", "Error adding Text", e);
+                                    Log.i("Main_Activity", "Error adding Text", e);
                                 }
                             });
                 }
@@ -133,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
         MobileAds.initialize(this, new OnInitializationCompleteListener() {
             @Override
             public void onInitializationComplete(InitializationStatus initializationStatus) {
-                Log.i("Log_Activity", "Ad Init Done.");
+                Log.i("Main_Activity", "Ad Init Done.");
             }
         });
 
