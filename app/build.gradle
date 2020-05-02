@@ -21,7 +21,6 @@ android {
 
 dependencies {
     implementation 'com.firebaseui:firebase-ui-auth:+'
-
     implementation 'com.google.firebase:firebase-ads:+'
     implementation 'com.google.firebase:firebase-firestore:21.2.1'
     implementation 'com.google.firebase:firebase-analytics:+'

@@ -1,10 +1,13 @@
 package com.devCluster.paperPlane;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -36,9 +39,13 @@ import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
+
     private FirebaseAuth mAuth;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+    private Toolbar toolbarMain;
+    private ActionBar actionBarMain;
 
     private TextView tvMain;
 
@@ -60,6 +67,18 @@ public class MainActivity extends AppCompatActivity {
         edtTitleSend = findViewById(R.id.edtTitleSend);
         edtSubTitleSend = findViewById(R.id.edtSubTitleSend);
         edtMainTextSend = findViewById(R.id.edtMainTextSend);
+
+        toolbarMain = findViewById(R.id.toolbarMain);
+        actionBarMain = getSupportActionBar();
+
+        //title off
+        actionBarMain.setDisplayShowTitleEnabled(false);
+        //add backspace button
+        actionBarMain.setDisplayHomeAsUpEnabled(true);
+        actionBarMain.setHomeAsUpIndicator(R.drawable.backspace_black);
+
+
+        mAuth = FirebaseAuth.getInstance();
 
         btnTextSend = findViewById(R.id.btnTextSend);
 
@@ -137,4 +156,17 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home: { // pressed backspace button
+                finish();
+                return true;
+            }
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+
 }
